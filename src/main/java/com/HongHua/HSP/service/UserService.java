@@ -14,7 +14,8 @@ public class UserService {
     public ApiResponse register(User user) {
         if (userMapper.findUserByEmail(user.getEmail()) == null) {
             userMapper.registerUser(user);
-            return new ApiResponse(201, "注册成功", null);
+            System.out.println(user.getEmail());
+            return new ApiResponse(201, "注册成功", "jwt data");
         }
         return new ApiResponse(400, "用户已存在", null);
     }
