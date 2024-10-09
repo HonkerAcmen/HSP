@@ -1,0 +1,7 @@
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.HongHua.HSP.model
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
