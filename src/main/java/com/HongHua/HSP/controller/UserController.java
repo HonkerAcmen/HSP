@@ -3,6 +3,7 @@ package com.HongHua.HSP.controller;
 import com.HongHua.HSP.model.ApiResponse;
 import com.HongHua.HSP.model.User;
 import com.HongHua.HSP.service.UserService;
+import com.HongHua.HSP.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,20 @@ public class UserController {
         return ResponseEntity.ok(userService.login(email, password));
     }
 
-    @PutMapping("/modifyUserInfo")
-    public ResponseEntity<ApiResponse> modifyUserInfo(@RequestBody User user) {
+    @PutMapping("/modifyUserInfo/{jwt}")
+    public ResponseEntity<ApiResponse> modifyUserInfo(@RequestBody User user, @PathVariable("jwt") String jwt) {
+        if (JwtUtil.validateToken(jwt) == null){
+            return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
+        }
         return ResponseEntity.ok(userService.modifyUserInfo(user));
     }
 
     @GetMapping("/getUserInfo/{jwt}")
     public ResponseEntity<ApiResponse> getUserInfo(@PathVariable("jwt") String jwt) {
+        // 验证 JWT
+        if (JwtUtil.validateToken(jwt) == null) {
+            return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
+        }
         return ResponseEntity.ok(userService.getUserInfo(jwt));
     }
 

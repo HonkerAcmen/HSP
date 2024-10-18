@@ -34,9 +34,11 @@ public class UserService {
     }
 
     public ApiResponse modifyUserInfo(User user) {
+
         user.setLastEditTime(LocalDateTime.now());
         userMapper.modifyUserData(user);
-        User newuser = userMapper.returnUserInfoById(user.getId());
+        User newuser = userMapper.findUserByEmail(user.getEmail());
+
         if (newuser == null) {
             return new ApiResponse(404, "用户不存在", null);
         }
@@ -48,13 +50,12 @@ public class UserService {
         String email = "";
         if (claims != null) {
             email = (String) claims.get("userEmail");
-        }
-        User newuser = userMapper.findUserByEmail(email);
-
-        if (newuser == null) {
+            User newuser = userMapper.findUserByEmail(email);
+            return new ApiResponse(200, "请求成功", newuser);
+        }else {
             return new ApiResponse(404, "用户不存在", null);
         }
-        return new ApiResponse(200, "请求成功", newuser);
     }
+
 
 }

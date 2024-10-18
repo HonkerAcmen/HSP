@@ -1,12 +1,7 @@
 package com.HongHua.HSP.utils;
 
-import ch.qos.logback.core.net.server.Client;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +10,7 @@ public class JwtUtil {
     private static final String KEY = "MJKWDJAWDKSKNAWDNJJJDAWDKawdmdakwm@$__2024__10__18__20__50__50";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
+//    创建一个JWT Token
     public static String generateToken(String userEmail){
         Map<String, Object> claims = new HashMap<>();
         claims.put("userEmail", userEmail);
@@ -26,6 +22,7 @@ public class JwtUtil {
                 .compact();
     }
 
+//    解析一个JWT Token
     public static Claims validateToken(String token){
         try{
             return Jwts.parser()
@@ -35,5 +32,10 @@ public class JwtUtil {
         }catch (SignatureException e){
             return null;
         }
+        catch (MalformedJwtException e){
+            return null;
+        }
     }
+
+
 }
