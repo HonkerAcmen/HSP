@@ -31,9 +31,9 @@ public class UserController {
         return ResponseEntity.ok(userService.modifyUserInfo(user));
     }
 
-    @GetMapping("/getUserInfo/{id}")
-    public ResponseEntity<ApiResponse> getUserInfo(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(userService.getUserInfo(id));
+    @GetMapping("/getUserInfo/{jwt}")
+    public ResponseEntity<ApiResponse> getUserInfo(@PathVariable("jwt") String jwt) {
+        return ResponseEntity.ok(userService.getUserInfo(jwt));
     }
 
 

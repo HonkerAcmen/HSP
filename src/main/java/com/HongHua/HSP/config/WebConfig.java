@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("") // 临时地址
+                .allowedOrigins("http://localhost:5173/") // 临时地址
                 .allowedMethods("GET", "POST")
                 .allowedHeaders("*");
     }
