@@ -3,6 +3,7 @@ package com.HongHua.HSP.service;
 import com.HongHua.HSP.mapper.UserMapper;
 import com.HongHua.HSP.model.ApiResponse;
 import com.HongHua.HSP.model.User;
+import com.HongHua.HSP.model.UserDTO;
 import com.HongHua.HSP.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,6 @@ public class UserService {
     }
 
     public ApiResponse modifyUserInfo(User user) {
-
         user.setLastEditTime(LocalDateTime.now());
         userMapper.modifyUserData(user);
         User newuser = userMapper.findUserByEmail(user.getEmail());
@@ -42,7 +42,7 @@ public class UserService {
         if (newuser == null) {
             return new ApiResponse(404, "用户不存在", null);
         }
-        return  new ApiResponse(201, "修改成功", null);
+        return  new ApiResponse(201, "修改成功", newuser);
     }
 
     public ApiResponse getUserInfo(String jwtString) {
@@ -50,8 +50,13 @@ public class UserService {
         String email = "";
         if (claims != null) {
             email = (String) claims.get("userEmail");
-            User newuser = userMapper.findUserByEmail(email);
-            return new ApiResponse(200, "请求成功", newuser);
+            System.out.println(email);
+            UserDTO newuser = userMapper.findUserByEmailUseDTO(email);
+            if (newuser == null){
+                return new ApiResponse(404, "请求失败", null);
+            }else{
+                return new ApiResponse(200, "请求成功", newuser);
+            }
         }else {
             return new ApiResponse(404, "用户不存在", null);
         }

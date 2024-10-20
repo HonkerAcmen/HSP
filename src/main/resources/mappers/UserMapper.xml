@@ -30,6 +30,9 @@
         SELECT * FROM users WHERE email = #{email}
     </select>
 
+    <select id="findUserByEmailUseDTO" parameterType="String" resultType="com.HongHua.HSP.model.UserDTO">
+        SELECT email, user_name,gender, profile_img,user_desc  FROM users WHERE email = #{email}
+    </select>
     <!-- 根据ID查询用户信息 -->
     <select id="returnUserInfo" resultType="com.HongHua.HSP.model.User">
         SELECT * FROM users WHERE id = #{id}
