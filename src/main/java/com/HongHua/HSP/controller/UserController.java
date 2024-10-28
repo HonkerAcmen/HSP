@@ -19,12 +19,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody User user) {
-        return ResponseEntity.ok(userService.register(user));
+        return userService.register(user);
     }
 
     @GetMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestParam String email, @RequestParam String password) {
-        return ResponseEntity.ok(userService.login(email, password));
+        return userService.login(email, password);
     }
 
     @PutMapping("/modifyUserInfo/{jwt}")
@@ -32,7 +32,7 @@ public class UserController {
         if (JwtUtil.validateToken(jwt) == null){
             return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
         }
-        return ResponseEntity.ok(userService.modifyUserInfo(user, jwt));
+        return userService.modifyUserInfo(user, jwt);
     }
 
     @GetMapping("/getUserInfo/{jwt}")
@@ -41,7 +41,7 @@ public class UserController {
         if (JwtUtil.validateToken(jwt) == null) {
             return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
         }
-        return ResponseEntity.ok(userService.getUserInfo(jwt));
+        return userService.getUserInfo(jwt);
     }
 
 

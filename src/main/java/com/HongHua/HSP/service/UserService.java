@@ -6,6 +6,7 @@ import com.HongHua.HSP.model.User;
 import com.HongHua.HSP.model.UserDTO;
 import com.HongHua.HSP.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,26 +17,28 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public ApiResponse register(User user) {
+    public ResponseEntity<ApiResponse> register(User user) {
         user.setCreateTime(LocalDateTime.now());
         user.setLastEditTime(LocalDateTime.now());
         if (userMapper.findUserByEmail(user.getEmail()) == null) {
             userMapper.registerUser(user);
             User newuser = userMapper.findUserByEmail(user.getEmail());
-            return new ApiResponse(201, "注册成功", JwtUtil.generateToken(user.getEmail(), newuser.getId()));
+            return ResponseEntity.status(201).body(new ApiResponse(201, "注册成功", JwtUtil.generateToken(user.getEmail(), newuser.getId())));
         }
-        return new ApiResponse(400, "用户已存在", null);
+        return ResponseEntity.status(400).body(new ApiResponse(400, "用户已存在", null));
+
     }
 
-    public ApiResponse login(String email, String password) {
+    public ResponseEntity<ApiResponse> login(String email, String password) {
         User user = userMapper.findUserByEmail(email);
         if (user != null && user.getPassword().equals(password)) {
-            return new ApiResponse(200, "登陆成功", JwtUtil.generateToken(user.getEmail(), user.getId()));
+            return ResponseEntity.status(200).body(new ApiResponse(200, "登陆成功", JwtUtil.generateToken(user.getEmail(), user.getId())));
         }
-        return new ApiResponse(401, "邮箱或密码错误", null);
+        return ResponseEntity.status(401).body(new ApiResponse(401, "邮箱或密码错误", null));
+
     }
 
-    public ApiResponse modifyUserInfo(User user, String token) {
+    public ResponseEntity<ApiResponse> modifyUserInfo(User user, String token) {
         user.setLastEditTime(LocalDateTime.now());
 
         // 获取用户 ID
@@ -52,7 +55,7 @@ public class UserService {
         }
 
         if (userID == null) {
-            return new ApiResponse(404, "用户不存在", null);
+            return ResponseEntity.status(404).body(new ApiResponse(404, "用户不存在", null));
         }
 
         // 使用 userID 创建新用户对象
@@ -66,12 +69,14 @@ public class UserService {
 
         // 更新用户数据
         userMapper.modifyUserData(newuser);
-        return new ApiResponse(201, "修改成功", newuser);
+
+        // 因为前端改变的数据无需再传，所以传递一个新的token即可。因为邮箱改变了，所以要用新邮箱签发一个新token
+        return ResponseEntity.status(201).body(new ApiResponse(201, "修改成功", JwtUtil.generateToken(user.getEmail(), newuser.getId())));
     }
 
 
 
-    public ApiResponse getUserInfo(String jwtString) {
+    public ResponseEntity<ApiResponse> getUserInfo(String jwtString) {
         Map<String, Object> claims = JwtUtil.validateToken(jwtString);
         String email = "";
         if (claims != null) {
@@ -79,12 +84,13 @@ public class UserService {
             System.out.println(email);
             UserDTO newuser = userMapper.findUserByEmailUseDTO(email);
             if (newuser == null){
-                return new ApiResponse(404, "请求失败", null);
+                return ResponseEntity.status(404).body(new ApiResponse(404, "请求失败", null));
             }else{
-                return new ApiResponse(200, "请求成功", newuser);
+                return ResponseEntity.status(200).body(new ApiResponse(200, "请求成功", newuser));
             }
         }else {
-            return new ApiResponse(404, "用户不存在", null);
+            return ResponseEntity.status(404).body(new ApiResponse(404, "用户不存在", null));
+
         }
     }
 
