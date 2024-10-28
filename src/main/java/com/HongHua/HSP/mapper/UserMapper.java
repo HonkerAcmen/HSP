@@ -15,4 +15,5 @@ public interface UserMapper {
     void modifyUserData(User user);
 
     User returnUserInfoById(@Param("id")Long id);
+    Long returnUserIDByEmail(@Param("email") String email);
 }

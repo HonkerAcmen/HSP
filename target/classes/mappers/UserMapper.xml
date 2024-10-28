@@ -38,4 +38,8 @@
         SELECT * FROM users WHERE id = #{id}
     </select>
 
+    <select id="returnUserIDByEmail" resultType="java.lang.Long">
+        SELECT id FROM users WHERE email = #{email}
+    </select>
+
 </mapper>

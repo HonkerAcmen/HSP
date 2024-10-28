@@ -32,7 +32,7 @@ public class UserController {
         if (JwtUtil.validateToken(jwt) == null){
             return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
         }
-        return ResponseEntity.ok(userService.modifyUserInfo(user));
+        return ResponseEntity.ok(userService.modifyUserInfo(user, jwt));
     }
 
     @GetMapping("/getUserInfo/{jwt}")

@@ -11,9 +11,10 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
 //    创建一个JWT Token
-    public static String generateToken(String userEmail){
+    public static String generateToken(String userEmail, Long id){
         Map<String, Object> claims = new HashMap<>();
         claims.put("userEmail", userEmail);
+        claims.put("id", id);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
