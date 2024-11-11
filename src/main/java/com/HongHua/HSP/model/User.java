@@ -3,17 +3,17 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "users")
 public class User {
-
-    // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
+    private Long userID;
     private String email;
     private String password;
     private String userName;
@@ -22,5 +22,4 @@ public class User {
     private String userDesc;
     private LocalDateTime createTime;
     private LocalDateTime lastEditTime;
-
 }

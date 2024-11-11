@@ -1,6 +1,7 @@
 package com.HongHua.HSP.controller;
 
 import com.HongHua.HSP.model.ApiResponse;
+import com.HongHua.HSP.model.Course;
 import com.HongHua.HSP.model.User;
 import com.HongHua.HSP.service.UserService;
 import com.HongHua.HSP.utils.JwtUtil;
@@ -44,5 +45,14 @@ public class UserController {
         return userService.getUserInfo(jwt);
     }
 
+    @PostMapping("/createCourse/{jwt}")
+    public ResponseEntity<ApiResponse> createCourse (@RequestBody Course course, @PathVariable("jwt") String jwt){
+        return userService.createCourse(course, jwt);
+    }
+
+    @GetMapping("/getAllUserCourse")
+    public ResponseEntity<ApiResponse> getUserCourse(@RequestParam String jwt){
+        return userService.getAllUserCourse(jwt);
+    }
 
 }
