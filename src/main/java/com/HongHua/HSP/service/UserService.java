@@ -96,7 +96,6 @@ public class UserService {
         String email = "";
         if (claims != null) {
             email = (String) claims.get("userEmail");
-            System.out.println(email);
             UserDTO newuser = userMapper.findUserByEmailUseDTO(email);
             if (newuser == null){
                 return ResponseEntity.status(404).body(new ApiResponse(404, "请求失败", null));
@@ -151,7 +150,7 @@ public class UserService {
         Integer userid = 0;
         if (claims != null){
             userid = (Integer) claims.get("id");
-            List<Course> courses = userCourseMapper.findCoursesByUserID(Long.valueOf(userid));
+            List<CourseDTO> courses = userCourseMapper.findCoursesByUserID(Long.valueOf(userid));
             if (!courses.isEmpty()){
                 return ResponseEntity.status(200).body(new ApiResponse(200, "请求成功", courses));
             }

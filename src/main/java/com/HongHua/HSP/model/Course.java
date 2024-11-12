@@ -18,12 +18,9 @@ public class Course {
 
     private String courseName;
     private String courseDesc;
-    private Integer courseTimeSize;
-
     @Column(name = "course_img", columnDefinition = "BLOB")
     private String courseImg;
     private Integer courseImgSize;
     private LocalDateTime lastEditTime;
     private LocalDateTime createTime;
-
 }
