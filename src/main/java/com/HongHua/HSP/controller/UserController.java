@@ -3,6 +3,7 @@ package com.HongHua.HSP.controller;
 import com.HongHua.HSP.model.ApiResponse;
 import com.HongHua.HSP.model.Course;
 import com.HongHua.HSP.model.User;
+import com.HongHua.HSP.model.UserDTO;
 import com.HongHua.HSP.service.UserService;
 import com.HongHua.HSP.utils.JwtUtil;
 import org.slf4j.Logger;
@@ -14,45 +15,27 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api")
 public class UserController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody User user) {
-        return userService.register(user);
+    @PutMapping("/modifyUserInfo")
+    public ResponseEntity<ApiResponse> modifyUserInfo(@RequestBody UserDTO user) {
+        return userService.modifyUserInfo(user);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestParam String email, @RequestParam String password) {
-        return userService.login(email, password);
+    @GetMapping("/getUserInfo")
+    public ResponseEntity<ApiResponse> getUserInfo() {
+        return userService.getUserInfo();
     }
 
-    @PutMapping("/modifyUserInfo/{jwt}")
-    public ResponseEntity<ApiResponse> modifyUserInfo(@RequestBody User user, @PathVariable("jwt") String jwt) {
-        if (JwtUtil.validateToken(jwt) == null){
-            return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
-        }
-        return userService.modifyUserInfo(user, jwt);
-    }
-
-    @GetMapping("/getUserInfo/{jwt}")
-    public ResponseEntity<ApiResponse> getUserInfo(@PathVariable("jwt") String jwt) {
-        // 验证 JWT
-        if (JwtUtil.validateToken(jwt) == null) {
-            return ResponseEntity.status(401).body(new ApiResponse(401, "JWT 验证未通过", null));
-        }
-        return userService.getUserInfo(jwt);
-    }
-
-    @PostMapping("/createCourse/{jwt}")
-    public ResponseEntity<ApiResponse> createCourse (@RequestBody Course course, @PathVariable("jwt") String jwt){
-        return userService.createCourse(course, jwt);
+    @PostMapping("/createCourse")
+    public ResponseEntity<ApiResponse> createCourse (@RequestBody Course course){
+        return userService.createCourse(course);
     }
 
     @GetMapping("/getAllUserCourse")
-    public ResponseEntity<ApiResponse> getUserCourse(@RequestParam String jwt){
-        return userService.getAllUserCourse(jwt);
+    public ResponseEntity<ApiResponse> getUserCourse(){
+        return userService.getAllUserCourse();
     }
 
 }

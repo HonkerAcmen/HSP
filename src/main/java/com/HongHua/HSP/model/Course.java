@@ -21,6 +21,7 @@ public class Course {
     @Column(name = "course_img", columnDefinition = "BLOB")
     private String courseImg;
     private Integer courseImgSize;
+    private Integer courseTimeSize;
     private LocalDateTime lastEditTime;
     private LocalDateTime createTime;
 }

@@ -7,12 +7,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserValidateDTO {
     private Long userID;
-    private String userName;
-    private Integer gender;
-    private String profileImg;
-    private String userDesc;
+    private String email;
+    private String password;
+    private LocalDateTime createTime;
     private LocalDateTime lastEditTime;
-
 }
