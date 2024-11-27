@@ -20,8 +20,8 @@ public class Course {
     private String courseDesc;
     @Column(name = "course_img", columnDefinition = "BLOB")
     private String courseImg;
+    private String owner;
     private Integer courseImgSize;
-    private Integer courseTimeSize;
     private LocalDateTime lastEditTime;
     private LocalDateTime createTime;
 }

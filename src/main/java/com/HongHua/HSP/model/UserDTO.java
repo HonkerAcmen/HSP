@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class UserDTO {
     private Long userID;
     private String userName;
+    private String email;
     private Integer gender;
     private String profileImg;
     private String userDesc;

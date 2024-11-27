@@ -14,6 +14,9 @@ public interface UserMapper {
     @Select("SELECT * FROM users WHERE email = #{email}")
     User findUserByEmail(@Param("email") String email);
 
+    @Select("SELECT * FROM users WHERE email = #{email}")
+    UserDTO findUserByEmailIsUserDTO(@Param("email") String email);
+
     @Update("UPDATE users SET user_name = #{userName}, gender = #{gender}, profile_img = #{profileImg}, user_desc = #{userDesc}, last_edit_time = #{lastEditTime} WHERE USERID = #{userID}")
     void modifyUserData(UserDTO user);
 

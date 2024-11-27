@@ -5,8 +5,6 @@ import com.HongHua.HSP.mapper.UserCourseMapper;
 import com.HongHua.HSP.mapper.UserMapper;
 import com.HongHua.HSP.model.*;
 import com.HongHua.HSP.utils.JwtUtil;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,9 +52,9 @@ public class UserService {
                     .secure(false)
                     .maxAge(7 * 24 * 60 * 60) // 7 天过期
                     .build();
-//             cookie.toString() HttpHeaders.SET_COOKIE
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set(HttpHeaders.SET_COOKIE, cookie.toString());
+
             return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(new ApiResponse(201, "注册成功",token));
         }
         return ResponseEntity.status(400).body(new ApiResponse(400, "此账号已注册", null));
@@ -98,57 +96,22 @@ public class UserService {
         // 更新用户数据
         userMapper.modifyUserData(user);
 
+        List<CourseDTO> courses =  userCourseMapper.findCoursesDTOByUserID(user.getUserID());
+
+        for (CourseDTO course : courses){
+            courseMapper.updateCourseOwner(course.getCourseID(), user.getUserName() + "#" + user.getEmail());
+        }
+
+
         return ResponseEntity.status(201).body(new ApiResponse(201, "修改成功", null));
     }
 
 
 //    获取用户信息
-    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     public ResponseEntity<ApiResponse> getUserInfo() {
             String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User user = userMapper.findUserByEmail(userEmail);
+            UserDTO user = userMapper.findUserByEmailIsUserDTO(userEmail);
             return ResponseEntity.ok(new ApiResponse(200, "请求成功", user));
         }
 
-//    创建课程
-    public ResponseEntity<ApiResponse> createCourse(Course course){
-        course.setCreateTime(LocalDateTime.now());
-        course.setLastEditTime(LocalDateTime.now());
-
-        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.findUserByEmail(userEmail);
-
-        // 创建新的userCourse表数据
-        UserCourse userCourse = new UserCourse();
-        userCourse.setUserID(user.getUserID());
-        userCourse.setCreateTime(LocalDateTime.now());
-        userCourse.setLastEditTime(LocalDateTime.now());
-
-        // 插入课程数据, @Insert
-        courseMapper.insertCourse(course);
-
-        // 因为在@Insert下使用了Mybatis的@Options的主键和自增，在这之前并没有，所以放在@Insert后
-        userCourse.setCourseID(course.getCourseID());
-
-        // 插入用户课程
-        userCourseMapper.insertUserCourse(userCourse);
-
-        if (courseMapper.findByCourseID(course.getCourseID()) != null && userCourseMapper.findCoursesByUserID(user.getUserID()) != null){
-            return ResponseEntity.status(200).body(new ApiResponse(200, "课程创建成功", null));
-        }
-            return ResponseEntity.status(400).body(new ApiResponse(400, "课程创建失败", null));
-    }
-
-//    获取用户的创建的课程
-    public ResponseEntity<ApiResponse> getAllUserCourse(){
-        String userEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userMapper.findUserByEmail(userEmail);
-        List<CourseDTO> courses =  userCourseMapper.findCoursesByUserID(user.getUserID());
-
-        if (!courses.isEmpty()){
-                return ResponseEntity.status(200).body(new ApiResponse(200, "请求成功", courses));
-        }else{
-            return ResponseEntity.status(404).body(new ApiResponse(404, "该用户没有创建课程", null));
-        }
-    }
 }
