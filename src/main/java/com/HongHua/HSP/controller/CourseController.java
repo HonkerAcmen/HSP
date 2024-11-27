@@ -3,7 +3,6 @@ package com.HongHua.HSP.controller;
 import com.HongHua.HSP.model.ApiResponse;
 import com.HongHua.HSP.model.Course;
 import com.HongHua.HSP.service.CourseService;
-import com.HongHua.HSP.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,12 @@ public class CourseController {
     }
 
     @GetMapping("/getAllUserCourse")
-    public ResponseEntity<ApiResponse> getUserCourse(){
+    public ResponseEntity<ApiResponse> getAllUserCourse(){
         return courseService.getAllUserCourse();
+    }
+
+    @GetMapping("/getUserCourse")
+    public ResponseEntity<ApiResponse> getUserCourse(@RequestParam Long courseID){
+        return courseService.getUserCourse(courseID);
     }
 }

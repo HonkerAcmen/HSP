@@ -67,4 +67,15 @@ public class CourseService {
             return ResponseEntity.status(404).body(new ApiResponse(404, "该用户没有创建课程", null));
         }
     }
+
+    public ResponseEntity<ApiResponse> getUserCourse(Long courseID){
+        CourseDTO courseDTO = courseMapper.findCourseByIDDTO(courseID);
+        if (courseDTO != null){
+            return ResponseEntity.status(200).body(new ApiResponse(200, "请求成功", courseDTO));
+        }else{
+            return ResponseEntity.status(404).body(new ApiResponse(404, "课程不存在", null));
+        }
+    }
+
+
 }

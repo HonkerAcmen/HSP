@@ -1,6 +1,7 @@
 package com.HongHua.HSP.mapper;
 
 import com.HongHua.HSP.model.Course;
+import com.HongHua.HSP.model.CourseDTO;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
@@ -12,6 +13,9 @@ public interface CourseMapper {
 
     @Select("SELECT * FROM courses WHERE courseID = #{courseID}")
     Course findByCourseID(Long courseID);
+
+    @Select("SELECT * FROM courses WHERE courseID = #{courseID}")
+    CourseDTO findCourseByIDDTO(Long courseID);
 
     @Update("UPDATE courses SET OWNER = #{owner} WHERE courseID = #{courseID}")
     void updateCourseOwner(Long courseID, String owner);
