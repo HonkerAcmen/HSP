@@ -98,6 +98,7 @@ public class UserService {
 
         List<CourseDTO> courses =  userCourseMapper.findCoursesDTOByUserID(user.getUserID());
 
+        // 给每个owner增加后缀 用户名#电子邮件
         for (CourseDTO course : courses){
             courseMapper.updateCourseOwner(course.getCourseID(), user.getUserName() + "#" + user.getEmail());
         }
