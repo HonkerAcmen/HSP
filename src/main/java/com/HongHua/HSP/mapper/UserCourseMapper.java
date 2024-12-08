@@ -22,4 +22,5 @@ public interface UserCourseMapper {
             "WHERE uc.userID = #{userID}")
     List<CourseDTO> findCoursesDTOByUserID(Long userID);
 
+
 }
